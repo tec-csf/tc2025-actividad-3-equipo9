@@ -7,7 +7,7 @@
 #include <fcntl.h>
 
 void crawler(char *basePath, long int *max, long int *counter, long int *sizes, long int *mult);
-void urner(long int *sizes, long int counter, long int urns, long int urn);
+void urner(long int *sizes, long int counter, long int max, long int urn);
 
 
 int main()
@@ -29,7 +29,7 @@ int main()
     printf("Enter path to list files: \n");
     // scanf("%s", path);
 
-    strcpy(path, "/mnt/d/Games/Emulators/ROMs");
+    strcpy(path, "..");
 
     crawler(path, &max, &counter, sizes, &mult);
 
@@ -37,9 +37,9 @@ int main()
 
     // printf("Enter urn size: \n");
     // scanf("%ld", &urn);
-    urn = 200000000;
+    urn = 1024;
 
-    urner(sizes, counter, max/urn, urn);
+    urner(sizes, counter, max, urn);
 
     // for (int i = 0; i < counter; i++)
     // {
@@ -119,8 +119,9 @@ void crawler(char *basePath, long int *max, long int *counter, long int *sizes, 
     closedir(dir);
 }
 
-void urner(long int *sizes, long int counter, long int urnNum, long int urnSize)
+void urner(long int *sizes, long int counter, long int max, long int urnSize)
 {
+    long int urnNum = max/urnSize + 1;
     printf("Number of urns: %ld\n", urnNum);
 
     int* urns;
@@ -138,6 +139,6 @@ void urner(long int *sizes, long int counter, long int urnNum, long int urnSize)
 
     for (int i = 0; i < urnNum; i++)
     {
-        printf("%d\n", urns[i]);
+        printf("%ld-%ld    %d\n", urnSize*(i), urnSize*(i+1)-1, urns[i]);
     }
 }
