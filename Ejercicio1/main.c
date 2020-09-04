@@ -16,8 +16,69 @@ typedef struct{
     int execTime;
 }theChild;
 
+typedef struct helper
+{
+    theChild * babyYoda;
+    struct helper * forward;
+}helper_t;
+
+helper_t * head = NULL;
+int procAmount = 0;
+
+void enqueue(int childId, int procMando, int execTime)
+{
+    helper_t *current = head;
+
+    if (procAmount == 0)
+    {         
+        theChild * vL = (theChild*)malloc(sizeof(theChild));
+        vL->childId = childId;
+        vL->procMando = procMando;
+        vL->execTime = execTime;
+
+        head->babyYoda = vL;
+    }
+    else{ 
+        while (current->forward != NULL){
+            current = current->forward;
+        }
+
+        current->forward = malloc(sizeof(helper_t));
+        
+        theChild *vL = (theChild *)malloc(sizeof(theChild));
+        vL->childId = childId;
+        vL->procMando = procMando;
+        vL->execTime = execTime;
+
+        current->forward->babyYoda = vL;
+        current->forward->forward = NULL;
+    }
+    ++procAmount;
+}
+
+helper_t * dequeue(){
+    helper_t * returningValue;
+
+    if (procAmount == 1){
+        returningValue = head->babyYoda;
+    }
+    else{
+
+        helper_t *nextProc = head->forward;
+        returningValue = head->babyYoda;
+        free(head->babyYoda);
+        free(head);
+        head = nextProc;
+    }
+    --procAmount;
+    return returningValue;
+}
+
 int main(int argc, char const *argv[]){
     
+    head = malloc(sizeof(helper_t));
+    head->forward = NULL; 
+
     //Variables donde se encuentran las cantidades ingresadas
     int cpu = 0, \
     cantProc = 0, \
