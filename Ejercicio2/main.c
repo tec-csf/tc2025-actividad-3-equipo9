@@ -13,6 +13,7 @@ int main()
 {
     // Directory path
     char* path;
+    long long int urn;
 
     path = (char*)malloc(100 * sizeof(char)); 
     // char path[100] = "/mnt/d/Games/Emulators/ROMs";
@@ -26,6 +27,9 @@ int main()
     crawler(path);
 
     free(path);
+
+    printf("Enter urn size: ");
+    scanf("%lld", &urn);
 
     return 0;
 }
@@ -67,7 +71,7 @@ void crawler(char *basePath)
             //checks if entry is file and gets its size
             if (S_ISREG(buffer.st_mode))
             {
-                printf("%ld\n\n", buffer.st_size);
+                printf("%lld\n\n", buffer.st_size);
             }
 
             
