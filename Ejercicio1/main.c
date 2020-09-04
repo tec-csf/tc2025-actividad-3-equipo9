@@ -6,6 +6,9 @@
  *  Daniel Roa
  *  Miguel Monterrubio 
  * 
+ *  IMPORTANTE:
+ *  ESTE CÓDIGO FUE ELABORADO CON EL APOYO DE SERGIO HERNÁNDEZ, DEBIDO A QUE IGUAL LE TOCÓ
+ *  TRABAJAR EN ESTE MISMO EJERCICIO.
  */
 #include <stdio.h>
 #include <stdlib.h>
