@@ -46,13 +46,14 @@ void crawler(char *basePath)
             strcat(nextPath, "/");
             strcat(nextPath, dirent->d_name);
 
-            status = stat("nextPath", &buffer);
-            if (S_ISREG(buffer.st_mode))
+            status = stat(nextPath, &buffer);
+            if (S_ISDIR(buffer.st_mode))
             {
                 printf("%s\n", "isdir");
+                crawler(nextPath);
             }
 
-            crawler(nextPath);
+            
         }
     }
 
