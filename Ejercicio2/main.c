@@ -49,8 +49,13 @@ void crawler(char *basePath)
             status = stat(nextPath, &buffer);
             if (S_ISDIR(buffer.st_mode))
             {
-                printf("%s\n", "isdir");
+                printf("%s\n\n", "isdir");
                 crawler(nextPath);
+            }
+
+            if (S_ISREG(buffer.st_mode))
+            {
+                printf("%ld\n\n", buffer.st_size);
             }
 
             
