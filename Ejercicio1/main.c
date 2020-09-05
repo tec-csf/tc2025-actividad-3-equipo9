@@ -126,7 +126,6 @@ int main(int argc, char const *argv[]){
         scanf("%d", &cantSub);
 
         yodasEnTotal += cantSub;
-        printf("\n%d\n", yodasEnTotal);
         *i = yodasEnTotal;
 
         ++i;
