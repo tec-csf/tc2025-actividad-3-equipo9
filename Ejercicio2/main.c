@@ -123,6 +123,7 @@ void urner(long int *sizes, long int counter, long int max, long int urnSize)
 {
     long int urnNum = max/urnSize + 1;
     printf("Number of urns: %ld\n", urnNum);
+    int perc;
 
     int* urns;
     urns = (int*)malloc(sizeof(int) * urnNum);
@@ -139,6 +140,21 @@ void urner(long int *sizes, long int counter, long int max, long int urnSize)
 
     for (int i = 0; i < urnNum; i++)
     {
-        printf("%ld-%ld    %d\n", urnSize*(i), urnSize*(i+1)-1, urns[i]);
+        if (urns[i] > 0)
+        {
+            printf("%7ld   -%7ld    %5d   ", urnSize*(i), urnSize*(i+1)-1, urns[i]);
+            perc = urns[i]*100/counter;
+            for (int i = 0; i <= perc; ++i)
+            {
+                printf("*");
+            }
+
+            printf("\n");
+        }
+        else
+        {
+            printf("%7ld   -%7ld    %5d   \n", urnSize*(i), urnSize*(i+1)-1, urns[i]);
+        }
+        
     }
 }
