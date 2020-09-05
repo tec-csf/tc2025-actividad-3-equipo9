@@ -12,6 +12,7 @@
  */
 #include <stdio.h>
 #include <stdlib.h>
+#include <unistd.h>
 
 typedef struct{
     int procMando;
@@ -23,21 +24,22 @@ typedef struct helper
 {
     theChild * babyYoda;
     struct helper * forward;
-}helper_t;
+}theHelper;
 
-helper_t * head = NULL;
+theHelper * head = NULL;
 int procAmount = 0;
 
-void enqueue(int childId, int procMando, int execTime)
+void enqueue(int contYodas, int contGral, int crono)
 {
-    helper_t *current = head;
 
-    if (procAmount == 0)
-    {         
+    theHelper *current = head;
+
+    if (procAmount == 0){
+
         theChild * vL = (theChild*)malloc(sizeof(theChild));
-        vL->childId = childId;
-        vL->procMando = procMando;
-        vL->execTime = execTime;
+        vL->childId = contYodas;
+        vL->procMando = contGral;
+        vL->execTime = crono;
 
         head->babyYoda = vL;
     }
@@ -46,12 +48,12 @@ void enqueue(int childId, int procMando, int execTime)
             current = current->forward;
         }
 
-        current->forward = malloc(sizeof(helper_t));
-        
         theChild *vL = (theChild *)malloc(sizeof(theChild));
-        vL->childId = childId;
-        vL->procMando = procMando;
-        vL->execTime = execTime;
+        current->forward = malloc(sizeof(theHelper));
+        
+        vL->childId = contYodas;
+        vL->procMando = contGral;
+        vL->execTime = crono;
 
         current->forward->babyYoda = vL;
         current->forward->forward = NULL;
@@ -59,87 +61,149 @@ void enqueue(int childId, int procMando, int execTime)
     ++procAmount;
 }
 
-helper_t * dequeue(){
-    helper_t * returningValue;
+theChild * dequeue(){
+    theChild * sayonara;
 
-    if (procAmount == 1){
-        returningValue = head->babyYoda;
+    if(procAmount == 0){
+        sayonara = NULL;
     }
-    else{
+    else if (procAmount == 1){
+        sayonara = head->babyYoda;
+    }else{
 
-        helper_t *nextProc = head->forward;
-        returningValue = head->babyYoda;
-        free(head->babyYoda);
+        theHelper *nextProc = head->forward;
+        sayonara = head->babyYoda;
         free(head);
         head = nextProc;
     }
     --procAmount;
-    return returningValue;
+    return sayonara;
 }
 
 int main(int argc, char const *argv[]){
     
-    head = malloc(sizeof(helper_t));
+    head = malloc(sizeof(theHelper));
     head->forward = NULL; 
 
     //Variables donde se encuentran las cantidades ingresadas
     int cpu = 0, \
     cantProc = 0, \
     cantSub = 0, \
-    execTimeIn = 0;
+    execTimeIn = 0,\
+    yodasEnTotal = 0, \
+    order = 0, \
+    fries = 0, \
+    total = 0,\
+    crono = 0, \
+    contYodas = -1,\
+    cronoQuantum = 5;
     
     //Varbiables para realizar contadores
     int contProc = 0,\
     contSub = 0,\
     cont = 0;
 
-    printf("\nIngrese la cantidad de procesos que se van a crear: ");
-    scanf("%d", &cantProc);
+    printf("El quantum de ejecución por default es de %d", cronoQuantum);
 
     printf("\nIngrese la cantidad de CPUs que va a utilizar: ");
     scanf("%d", &cpu);
 
-    theChild * yodas = (theChild*) malloc(sizeof(theChild) * cantProc);
-    theChild * fin = yodas + cantProc;
+    printf("\nIngrese la cantidad de procesos que se van a crear: ");
+    scanf("%d", &cantProc);
+    printf("\n");
 
-    printf("Inserta los datos que se soliciten a continuación:\n");
+    //Cantidad de procesos
+    int * proQ = malloc(sizeof(int) * cantProc);
+    int * fin = proQ + cantProc;
 
-    theChild * auxilio = yodas;
+    int * i = proQ;
+    int contGral = 0;
 
-    while (cont != cantProc){
-
-        printf("Escriba la cantidad de subprocesos que va a tener el proceso: %d\n", cont);
+    while ((i<fin) && (contGral < cantProc))
+    {
+        printf("Escriba la cantidad de subprocesos que va a tener el proceso %d: ", contGral);
         scanf("%d", &cantSub);
 
-        if(contSub < cantSub){
-            for (; contSub < cantSub; contSub++){
-                
-                auxilio->procMando = cont;
-                auxilio->childId = contSub;
+        yodasEnTotal += cantSub;
+        printf("\n%d\n", yodasEnTotal);
+        *i = yodasEnTotal;
 
-                printf("\nEscriba el tiempo de ejecución: ");
-                scanf("%d", &execTimeIn);
-
-                auxilio->execTime = execTimeIn;
-
-                printf("Proceso padre #%d\n", auxilio->procMando);
-                printf("Proceso hijo #%d\n", auxilio->childId);
-                printf("Tiempo de ejecución: %d\n", auxilio->execTime);
-            }
-            
-
-            printf("\nProceso hijo por comenzar a manejar: %d\n\n", contSub);
-        }
-        cont+=1;
-        contSub = 0;
-        cantSub = 0;
-    }
-
-    for (theChild * support = 0; support < fin; ++support)
-    {
-        printf("Mando process: %d\tChild process: %d\tExec time: %d", support->procMando, support->childId, support->execTime);
+        ++i;
+        ++contGral;
     }
     
 
+   /*  for (; i < fin; ++i){
+        for (; contGral < cantProc; ++contGral){
+            printf("Escriba la cantidad de subprocesos que va a tener el proceso %d: ", contGral);
+            scanf("%d", &cantSub);
+            
+            yodasEnTotal += cantSub;
+            printf("\n%d\n", yodasEnTotal);
+            *i = yodasEnTotal;
+        }
+        
+    } */
+
+    i = proQ;
+    contGral = 0;
+    
+    int fFries = 0;
+
+    for (; order < yodasEnTotal; ++order){
+        if (fFries == *i){
+
+            contYodas = 0;
+            contProc+=1;
+            ++fFries;
+            ++i;
+
+        }else{
+
+            ++contYodas;
+            ++fFries;
+
+        }
+        
+        printf("Inserte el tiempo de ejecución del proceso %d y subproceso %d: ", contProc, contYodas);
+        scanf("%d", &crono);
+
+        printf("Se está insertando al Round Robin\n");
+        printf("\nSub: %d\tProc:%d\tExec:%d\n", contYodas, contProc, crono);
+        enqueue(contYodas, contGral, crono);
+
+    }    
+
+    while (procAmount > 0)
+    {
+
+        for (int argH = 0; argH < cpu; ++argH){
+            if (procAmount > 0){
+                theChild * bY = dequeue();
+                // printf("\nEl subproceso %d del proceso %d acaba de salir de la cola y entró al CPU %d", bY->childId, bY->procMando, argH);
+
+                bY->execTime -= cronoQuantum;
+
+                if (bY->execTime <= 0){
+                    printf("\nEl subproceso %d del proceso %d terminó su tiempo de ejecución\n", bY->childId, bY->procMando);
+                    free(bY);
+                }else if (bY->execTime > 0){
+
+                    printf("\nEl subproceso %d del proceso %d acaba de salir de la cola y entró al CPU %d\n", bY->childId, bY->procMando, argH);
+                    enqueue(bY->childId, bY->procMando, bY->execTime);
+
+                }  
+                
+            }
+            
+        }
+        sleep(5);
+        printf("\nFin de quantum\n");
+        
+    }
+
+    printf("\nFIN DE OPERACIÓN\n");
+    free(proQ);
+    
     return 0;
 }
