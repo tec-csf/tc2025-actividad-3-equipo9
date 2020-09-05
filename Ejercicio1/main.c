@@ -35,8 +35,9 @@ void enqueue(int contYodas, int contGral, int crono)
     theHelper *current = head;
 
     if (procAmount == 0){
-
+        
         theChild * vL = (theChild*)malloc(sizeof(theChild));
+
         vL->childId = contYodas;
         vL->procMando = contGral;
         vL->execTime = crono;
@@ -157,9 +158,11 @@ int main(int argc, char const *argv[]){
 
         printf("Se está insertando al Round Robin\n");
         printf("\nSub: %d\tProc:%d\tExec:%d\n", contYodas, contProc, crono);
-        enqueue(contYodas, contGral, crono);
+        enqueue(contYodas, contProc, crono);
 
     }    
+
+
 
     while (procAmount > 0)
     {
