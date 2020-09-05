@@ -14,30 +14,29 @@ int main()
 {
     
     long int urn;
-    long int mult = 100;
+    long int mult = 1000;
     long int counter = 0;
     long int max = 0;
 
+    //dynamic array for directory path
     char* path;
     path = (char*)malloc(100 * sizeof(char)); 
-    // char path[100] = "/mnt/d/Games/Emulators/ROMs";
 
+    //dynamic array to store file sizes
     long int* sizes;
     sizes = (long int*)malloc(sizeof(long int) * mult);
 
     // Input path from user
     printf("Enter path to list files: \n");
-    // scanf("%s", path);
-
-    strcpy(path, "..");
+    scanf("%s", path);
 
     crawler(path, &max, &counter, sizes, &mult);
 
     free(path);
 
-    // printf("Enter urn size: \n");
-    // scanf("%ld", &urn);
-    urn = 1024;
+    //input urn size from user
+    printf("Enter urn size: \n");
+    scanf("%ld", &urn);
 
     urner(sizes, counter, max, urn);
 
@@ -46,10 +45,12 @@ int main()
     //     printf("%ld\n", sizes[i]);
     // }
 
+    free(sizes);
+
     return 0;
 }
 
-
+//recursive function to get all file sizes
 void crawler(char *basePath, long int *max, long int *counter, long int *sizes, long int *mult)
 {
     struct stat buffer;
@@ -61,7 +62,7 @@ void crawler(char *basePath, long int *max, long int *counter, long int *sizes, 
     struct dirent *dirent;
     DIR *dir = opendir(basePath);
 
-    // if not directory or unable to open, exit
+    // if unable to open, exit
     if (!dir)
         return;
 
@@ -70,7 +71,7 @@ void crawler(char *basePath, long int *max, long int *counter, long int *sizes, 
         if (strcmp(dirent->d_name, ".") != 0 && strcmp(dirent->d_name, "..") != 0)
         {
             
-
+            //adds dir name to path for next instance
             strcpy(nextPath, basePath);
             strcat(nextPath, "/");
             strcat(nextPath, dirent->d_name);
@@ -83,7 +84,7 @@ void crawler(char *basePath, long int *max, long int *counter, long int *sizes, 
                 crawler(nextPath, max, counter, sizes, mult);
             }
 
-            //checks if entry is file and gets its size
+            //checks if entry is file and saves size to array
             if (S_ISREG(buffer.st_mode))
             {
                 printf("Name: %s\nWeight: %ld\n\n", dirent->d_name, buffer.st_size);
@@ -117,8 +118,10 @@ void crawler(char *basePath, long int *max, long int *counter, long int *sizes, 
     }
 
     closedir(dir);
+    free(nextPath);
 }
 
+//sorts the file sizes into urns
 void urner(long int *sizes, long int counter, long int max, long int urnSize)
 {
     long int urnNum = max/urnSize + 1;
@@ -128,16 +131,19 @@ void urner(long int *sizes, long int counter, long int max, long int urnSize)
     int* urns;
     urns = (int*)malloc(sizeof(int) * urnNum);
 
+    //sets urn size to 0
     for (int i = 0; i < urnNum; i++)
     {
         urns[i] = 0;
     }
 
+    //adds to counter for each urn depending on file size
     for (int i = 0; i < counter; ++i)
     {
         urns[sizes[i]/urnSize] += 1;
     }
 
+    //prints histogram
     for (int i = 0; i < urnNum; i++)
     {
         if (urns[i] > 0)
@@ -157,4 +163,5 @@ void urner(long int *sizes, long int counter, long int max, long int urnSize)
         }
         
     }
+    // printf("EMPTY URNS WERE OMITTED\n");
 }
