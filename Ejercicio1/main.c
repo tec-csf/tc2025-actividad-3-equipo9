@@ -131,19 +131,6 @@ int main(int argc, char const *argv[]){
         ++i;
         ++contGral;
     }
-    
-
-   /*  for (; i < fin; ++i){
-        for (; contGral < cantProc; ++contGral){
-            printf("Escriba la cantidad de subprocesos que va a tener el proceso %d: ", contGral);
-            scanf("%d", &cantSub);
-            
-            yodasEnTotal += cantSub;
-            printf("\n%d\n", yodasEnTotal);
-            *i = yodasEnTotal;
-        }
-        
-    } */
 
     i = proQ;
     contGral = 0;
@@ -180,7 +167,6 @@ int main(int argc, char const *argv[]){
         for (int argH = 0; argH < cpu; ++argH){
             if (procAmount > 0){
                 theChild * bY = dequeue();
-                // printf("\nEl subproceso %d del proceso %d acaba de salir de la cola y entró al CPU %d", bY->childId, bY->procMando, argH);
 
                 bY->execTime -= cronoQuantum;
 
@@ -197,7 +183,7 @@ int main(int argc, char const *argv[]){
             }
             
         }
-        sleep(5);
+        sleep(cronoQuantum);
         printf("\nFin de quantum\n");
         
     }
